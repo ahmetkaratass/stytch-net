@@ -6,13 +6,17 @@ namespace Stytch.MagicLink;
 
 public class MagicLink : IMagicLink
 {
-    public string ProjectId { get; set; } = "project-test-18a43ec3-a866-4f9f-9e16-ea4810ecd352";
-    public string Secret { get; set; } = "secret-test-GlVyZ7BMQpRdhkw3Bq7mm5ehtdM5iUmoodc=";
-    public string Env { get; set; } = "test";
+    private readonly string _env;
     private readonly HttpClient _httpClient;
 
-    public MagicLink(HttpClient httpClient) =>
-        _httpClient = httpClient.AddBasicAuthentication(ProjectId, Secret);
+    public MagicLink(HttpClient httpClient, string projectId, string secret, string env)
+    {
+        ArgumentNullException.ThrowIfNull(httpClient);
+        ArgumentNullException.ThrowIfNullOrEmpty(projectId);
+        ArgumentNullException.ThrowIfNullOrEmpty(secret);
+        _env = env ?? throw new ArgumentNullException(nameof(env));
+        _httpClient = httpClient.AddBasicAuthentication(projectId, secret);
+    }
 
     /// <summary>
     /// Send a magic link to an existing Stytch user using their email address
@@ -22,7 +26,7 @@ public class MagicLink : IMagicLink
     /// <returns></returns>
     public async Task<SendMagicLinkResponse> SendMagicLink(SendMagicLinkParams sendMagicLinkParams)
     {
-        var url = $"https://{Env}.stytch.com/v1/magic_links/email/send";
+        var url = GetUrl("email/send");
         var request = await _httpClient.PostAsJsonAsync(url, sendMagicLinkParams);
         return await request.Content.ReadFromJsonAsync<SendMagicLinkResponse>()
             ?? new SendMagicLinkResponse();
@@ -36,7 +40,7 @@ public class MagicLink : IMagicLink
     /// <returns>Task<MagicLinkResponse></returns>
     public async Task<LoginOrCreateResponse> LoginOrCreate(LoginOrCreateParams loginOrCreateParams)
     {
-        var url = $"https://{Env}.stytch.com/v1/magic_links/email/login_or_create";
+        var url = GetUrl("email/login_or_create");
         var request = await _httpClient.PostAsJsonAsync(url, loginOrCreateParams);
         return await request.Content.ReadFromJsonAsync<LoginOrCreateResponse>()
             ?? new LoginOrCreateResponse();
@@ -51,7 +55,7 @@ public class MagicLink : IMagicLink
     /// <returns>Task<InviteResponse></returns>
     public async Task<InviteResponse> Invite(InviteParams inviteParams)
     {
-        var url = $"https://{Env}.stytch.com/v1/magic_links/email/invite";
+        var url = GetUrl("email/invite");
         var request = await _httpClient.PostAsJsonAsync(url, inviteParams);
         return await request.Content.ReadFromJsonAsync<InviteResponse>() ?? new InviteResponse();
     }
@@ -64,9 +68,28 @@ public class MagicLink : IMagicLink
     /// <returns>Task<RevokeInviteResponse></returns>
     public async Task<RevokeInviteResponse> RevokeInvite(string email)
     {
-        var url = $"https://{Env}.stytch.com/v1/magic_links/email/revoke_invite";
+        var url = GetUrl("email/revoke_invite");
         var request = await _httpClient.PostAsJsonAsync(url, new { email = email });
         return await request.Content.ReadFromJsonAsync<RevokeInviteResponse>()
             ?? new RevokeInviteResponse();
     }
+
+    /// <summary>
+    /// Authenticate a User given a Magic Link.
+    /// This endpoint verifies that the Magic Link token is valid,
+    /// hasn't expired or been previously used,
+    /// and any optional security settings such as IP match or user agent match are satisfied.
+    /// </summary>
+    /// <param name="authenticateParams">AuthenticateParams</param>
+    /// <see>https://stytch.com/docs/api/authenticate-magic-link</see>
+    /// <returns>Task<AuthenticateResponse></returns>
+    public async Task<AuthenticateResponse> Authenticate(AuthenticateParams authenticateParams)
+    {
+        var url = GetUrl("authenticate");
+        var request = await _httpClient.PostAsJsonAsync(url, authenticateParams);
+        return await request.Content.ReadFromJsonAsync<AuthenticateResponse>()
+            ?? new AuthenticateResponse();
+    }
+
+    public string GetUrl(string url) => $"https://{_env}.stytch.com/v1/magic_links/{url}";
 }

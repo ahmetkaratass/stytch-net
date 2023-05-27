@@ -8,5 +8,5 @@ public interface IMagicLink
     Task<SendMagicLinkResponse> SendMagicLink(SendMagicLinkParams sendMagicLinkParams);
     Task<InviteResponse> Invite(InviteParams inviteParams);
     Task<RevokeInviteResponse> RevokeInvite(string email);
-    Task Authenticate();
+    Task<AuthenticateResponse> Authenticate(AuthenticateParams authenticateParams);
 }
