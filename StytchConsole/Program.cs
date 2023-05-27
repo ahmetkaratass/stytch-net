@@ -6,8 +6,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        var projectId = "project-test-18a43ec3-a866-4f9f-9e16-ea4810ecd352";
-        var projectSecret = "secret-test-GlVyZ7BMQpRdhkw3Bq7mm5ehtdM5iUmoodc=";
+        var projectId = "";
+        var projectSecret = "";
         var env = "test";
 
         var services = new ServiceCollection();
