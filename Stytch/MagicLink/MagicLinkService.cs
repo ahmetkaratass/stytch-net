@@ -4,12 +4,12 @@ using Stytch.Extensions;
 
 namespace Stytch.MagicLink;
 
-public class MagicLink : IMagicLink
+public class MagicLinkService : IMagicLinkService
 {
     private readonly string _env;
     private readonly HttpClient _httpClient;
 
-    public MagicLink(HttpClient httpClient, string projectId, string secret, string env)
+    public MagicLinkService(HttpClient httpClient, string projectId, string secret, string env)
     {
         ArgumentNullException.ThrowIfNull(httpClient);
         ArgumentNullException.ThrowIfNullOrEmpty(projectId);

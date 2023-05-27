@@ -11,6 +11,6 @@ public record BaseMagicLinkParams(
     [property: JsonPropertyName("login_template_id")] string? LoginTemplateId = null,
     [property: JsonPropertyName("signup_template_id")] string? SignupTemplateId = null,
     [property: JsonPropertyName("locale")] string? Locale = null,
-    [property: JsonPropertyName("attributes")] object? Attributes = null,
+    [property: JsonPropertyName("attributes")] Attributes? Attributes = null,
     [property: JsonPropertyName("code_challenge")] string? CodeChallenge = null
 );

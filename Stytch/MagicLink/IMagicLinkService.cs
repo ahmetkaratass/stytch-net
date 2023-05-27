@@ -2,7 +2,7 @@ using Stytch.Models.MagicLink;
 
 namespace Stytch.MagicLink;
 
-public interface IMagicLink
+public interface IMagicLinkService
 {
     Task<LoginOrCreateResponse> LoginOrCreate(LoginOrCreateParams loginOrCreateParams);
     Task<SendMagicLinkResponse> SendMagicLink(SendMagicLinkParams sendMagicLinkParams);

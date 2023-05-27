@@ -5,53 +5,8 @@ namespace Stytch.MagicLink.Tests;
 
 public class SendMagicLinkTest
 {
-    private string _projectId = "projectId";
-    private string _secret = "secret";
-    private string _env = "env";
-
-    [Theory]
-    [InlineData(null, null, null, false)]
-    [InlineData("id", null, null, false)]
-    [InlineData("id", "secret", null, false)]
-    [InlineData("id", "secret", "env", true)]
-    public void InitializeMagicLink(string projectId, string secret, string env, bool success)
-    {
-        // Act
-        var act = () => new MagicLink(new HttpClient(), projectId, secret, env);
-        var exception = Record.Exception(act);
-
-        // Assert
-        if (success)
-        {
-            Assert.Null(exception);
-        }
-        else
-        {
-            Assert.NotNull(exception);
-            Assert.Throws<ArgumentNullException>(act);
-        }
-    }
-
-    [Theory]
-    [InlineData("email/send")]
-    [InlineData("email/login_or_create")]
-    [InlineData("email/invite")]
-    [InlineData("email/revoke_invite")]
-    [InlineData("authenticate")]
-    public void GetUrl(string url)
-    {
-        // Arrange
-        var magicLink = new MagicLink(new HttpClient(), _projectId, _secret, _env);
-
-        // Act
-        var res = magicLink.GetUrl(url);
-
-        // Assert
-        Assert.Equal(res, $"https://{_env}.stytch.com/v1/magic_links/{url}");
-    }
-
     [Fact]
-    public async Task SendMagicLink_200_Simple()
+    public async Task SendMagicLink_Success()
     {
         // Arrange
         var email = "test@example.com";
@@ -66,11 +21,11 @@ public class SendMagicLinkTest
 
         var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
 
-        var magicLink = new MagicLink(
+        var magicLink = new MagicLinkService(
             new HttpClient(mockHttpMessageHandler),
-            _projectId,
-            _secret,
-            _env
+            Params.ProjectId,
+            Params.Secret,
+            Params.Env
         );
 
         // Act
@@ -88,5 +43,42 @@ public class SendMagicLinkTest
         Assert.IsType<SendMagicLinkResponse>(result);
     }
 
+    [Fact]
+    public async Task SendMagicLink_Error()
+    {
+        // Arrange
+        var email = "test@example.com";
+        var sendMagicLinkParams = new SendMagicLinkParams(email);
+        var response = new SendMagicLinkResponse
+        {
+            StatusCode = 400,
+            RequestId = "request-id-test-12031230841093",
+            ErrorType = "invalid_email",
+            ErrorMessage = "Email format is invalid",
+            ErrorUrl = "https://stytch.com/docs/api/errors/400"
+        };
 
+        var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
+
+        var magicLink = new MagicLinkService(
+            new HttpClient(mockHttpMessageHandler),
+            Params.ProjectId,
+            Params.Secret,
+            Params.Env
+        );
+
+        // Act
+        var result = await magicLink.SendMagicLink(sendMagicLinkParams);
+
+        // Assert
+        Assert.NotNull(result.ErrorMessage);
+        Assert.NotNull(result.ErrorType);
+        Assert.NotNull(result.ErrorUrl);
+        Assert.NotNull(result.RequestId);
+
+        Assert.Equal(result.StatusCode, 400);
+        Assert.Null(result.UserId);
+        Assert.Null(result.EmailId);
+        Assert.IsType<SendMagicLinkResponse>(result);
+    }
 }
