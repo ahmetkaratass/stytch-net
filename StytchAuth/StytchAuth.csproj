@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>StytchAuth</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.1-a.1</Version>
     <Authors>Ahmet Karatas</Authors>
   </PropertyGroup>
 

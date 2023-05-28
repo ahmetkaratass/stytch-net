@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace StytchAuth.Models;
+namespace StytchAuth.Models.Shared;
 
 public record Attributes(
     [property: JsonPropertyName("ip_address")] string? IpAddress = null,
