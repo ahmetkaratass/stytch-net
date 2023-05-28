@@ -27,4 +27,4 @@ dotnet add package ......
 
 In your Startup.cs / Program.cs you can inject the following service:
 
-`services.AddStytch(projectId, secret, environment)`
+`services.AddStytchAuth(projectId, secret, environment)`
