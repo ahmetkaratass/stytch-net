@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/StytchConsole/StytchConsole.csproj",
+                "${workspaceFolder}/StytchAuthConsole/StytchConsole.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/StytchConsole/StytchConsole.csproj",
+                "${workspaceFolder}/StytchAuthConsole/StytchConsole.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/StytchConsole/StytchConsole.csproj"
+                "${workspaceFolder}/StytchAuthConsole/StytchConsole.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

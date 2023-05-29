@@ -7,7 +7,7 @@
     <PackageId>StytchAuth</PackageId>
     <Version>0.0.1-a.2</Version>
     <Authors>Ahmet Karatas</Authors>
-    <Description>Provides the Stytch API in .NET 7. Built authentication easily in your application</Description>
+    <Description>Provides the Stytch API in .NET 7. With Stytch, you can build authentication very easily in your application</Description>
     <Copyright>Copyright (c) Ahmet Karatas 2023.</Copyright>
     <PackageProjectUrl>https://github.com/ahmetkaratass/stytch-net</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>

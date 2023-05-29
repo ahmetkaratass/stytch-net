@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/StytchConsole/bin/Debug/net7.0/StytchConsole.dll",
+            "program": "${workspaceFolder}/StytchAuthConsole/bin/Debug/net7.0/StytchConsole.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/StytchConsole",
+            "cwd": "${workspaceFolder}/StytchAuthConsole",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

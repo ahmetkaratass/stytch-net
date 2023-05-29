@@ -1,3 +1,4 @@
+using System.Net;
 using StytchAuth.MagicLink.Tests.Mocks;
 using StytchAuth.Models.MagicLink;
 
@@ -13,10 +14,11 @@ public class SendMagicLinkTest
         var sendMagicLinkParams = new SendMagicLinkParams(email);
         var response = new SendMagicLinkResponse
         {
-            StatusCode = 200,
+            StatusCode = HttpStatusCode.OK,
             RequestId = "request-id-test-12031230841093",
             UserId = "user-test-12031230841093",
-            EmailId = "email-test-12031230841093"
+            EmailId = "email-test-12031230841093",
+            IsSuccessStatusCode = true,
         };
 
         var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
@@ -36,7 +38,8 @@ public class SendMagicLinkTest
         Assert.Null(result.ErrorType);
         Assert.Null(result.ErrorUrl);
 
-        Assert.Equal(result.StatusCode, 200);
+        Assert.Equal(result.StatusCode, HttpStatusCode.OK);
+        Assert.True(result.IsSuccessStatusCode);
         Assert.NotNull(result.RequestId);
         Assert.NotNull(result.UserId);
         Assert.NotNull(result.EmailId);
@@ -51,11 +54,12 @@ public class SendMagicLinkTest
         var sendMagicLinkParams = new SendMagicLinkParams(email);
         var response = new SendMagicLinkResponse
         {
-            StatusCode = 400,
+            StatusCode = HttpStatusCode.BadRequest,
             RequestId = "request-id-test-12031230841093",
             ErrorType = "invalid_email",
             ErrorMessage = "Email format is invalid",
-            ErrorUrl = "https://stytch.com/docs/api/errors/400"
+            ErrorUrl = "https://stytch.com/docs/api/errors/400",
+            IsSuccessStatusCode = false,
         };
 
         var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
@@ -76,7 +80,8 @@ public class SendMagicLinkTest
         Assert.NotNull(result.ErrorUrl);
         Assert.NotNull(result.RequestId);
 
-        Assert.Equal(result.StatusCode, 400);
+        Assert.Equal(result.StatusCode, HttpStatusCode.BadRequest);
+        Assert.False(result.IsSuccessStatusCode);
         Assert.Null(result.UserId);
         Assert.Null(result.EmailId);
         Assert.IsType<SendMagicLinkResponse>(result);
