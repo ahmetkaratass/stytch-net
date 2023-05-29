@@ -9,11 +9,11 @@ The Stytch .NET library makes it easy to use the API that is provided by Stytch.
 - [X] Email Magic Links
 
 ## Install
+Nuget link: https://www.nuget.org/packages/StytchAuth
 
 To install this package run
-
 ```bash
-dotnet add package ......
+dotnet add package StytchAuth
 ```
 
 ## Usage
@@ -26,5 +26,11 @@ dotnet add package ......
 ## Example
 
 In your Startup.cs / Program.cs you can inject the following service:
+```c#
+using StytchAuth.Extensions;
 
-`services.AddStytchAuth(projectId, secret, environment)`
+.....
+
+services.AddStytchAuth(projectId, secret, environment);
+```
+
