@@ -34,3 +34,31 @@ using StytchAuth.Extensions;
 services.AddStytchAuth(projectId, secret, environment);
 ```
 
+You can create a controller, for example `MagicLinkController` and have something like this:
+```c# 
+public class MagicLinkController : ControllerBase
+{
+    private readonly IMagicLinkService _magicLinkService;
+
+    public MagicLinkController(IMagicLinkService magicLinkService)
+    {
+        _magicLinkService = magicLinkService;
+    }
+
+    [HttpPost("LoginOrCreate")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> LoginOrCreate([FromQuery] string email)
+    {
+        var response = await _magicLinkService.LoginOrCreate(new LoginOrCreateParams(email));
+        if (response.IsSuccessStatusCode)
+        {
+            // ...............
+            return Ok();
+        }
+        return BadRequest();
+    }
+}
+```
