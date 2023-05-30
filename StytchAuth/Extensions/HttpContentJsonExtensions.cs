@@ -1,27 +1,21 @@
-using System.Net;
 using StytchAuth.Models.MagicLink;
 
 namespace StytchAuth.Extensions;
 
 public static class HttpContentJsonExtensions
 {
-    public static async Task<T> AddRequestInfo<T>(this Task<T?> task, HttpResponseMessage? request)
-        where T : BaseMagicLinkErrorResponse, new()
+    public static async Task<T?> AddRequestInfo<T>(this Task<T?> task, HttpResponseMessage request)
+        where T : BaseMagicLinkErrorResponse
     {
         var result = await task;
         if (result != null)
         {
-            var statusCode = (HttpStatusCode)(result.StatusCode ?? 0);
-            if (Enum.IsDefined(typeof(HttpStatusCode), statusCode))
+            return result with
             {
-                return result with
-                {
-                    StatusCode = statusCode,
-                    IsSuccessStatusCode = request?.IsSuccessStatusCode
-                };
-            }
-            return result;
+                StatusCode = request.StatusCode,
+                IsSuccessStatusCode = request.IsSuccessStatusCode
+            };
         }
-        return new T();
+        return result;
     }
 }

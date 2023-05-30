@@ -1,3 +1,6 @@
+using System.Net;
+
 namespace StytchAuth.Models.MagicLink;
 
-public record RevokeInviteResponse : BaseMagicLinkErrorResponse;
+public record RevokeInviteResponse(HttpStatusCode StatusCode, bool IsSuccessStatusCode)
+    : BaseMagicLinkErrorResponse(StatusCode, IsSuccessStatusCode);

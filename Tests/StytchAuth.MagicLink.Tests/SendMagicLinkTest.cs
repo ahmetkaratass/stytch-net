@@ -12,16 +12,18 @@ public class SendMagicLinkTest
         // Arrange
         var email = "test@example.com";
         var sendMagicLinkParams = new SendMagicLinkParams(email);
-        var response = new SendMagicLinkResponse
+        var statusCode = HttpStatusCode.OK;
+        var response = new SendMagicLinkResponse(statusCode, true)
         {
-            StatusCode = HttpStatusCode.OK,
             RequestId = "request-id-test-12031230841093",
             UserId = "user-test-12031230841093",
             EmailId = "email-test-12031230841093",
-            IsSuccessStatusCode = true,
         };
 
-        var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
+        var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(
+            statusCode,
+            response
+        );
 
         var magicLink = new MagicLinkService(
             new HttpClient(mockHttpMessageHandler),
@@ -38,7 +40,7 @@ public class SendMagicLinkTest
         Assert.Null(result.ErrorType);
         Assert.Null(result.ErrorUrl);
 
-        Assert.Equal(result.StatusCode, HttpStatusCode.OK);
+        Assert.Equal(statusCode, result.StatusCode);
         Assert.True(result.IsSuccessStatusCode);
         Assert.NotNull(result.RequestId);
         Assert.NotNull(result.UserId);
@@ -52,17 +54,19 @@ public class SendMagicLinkTest
         // Arrange
         var email = "test@example.com";
         var sendMagicLinkParams = new SendMagicLinkParams(email);
-        var response = new SendMagicLinkResponse
+        var statusCode = HttpStatusCode.BadRequest;
+        var response = new SendMagicLinkResponse(statusCode, false)
         {
-            StatusCode = HttpStatusCode.BadRequest,
             RequestId = "request-id-test-12031230841093",
             ErrorType = "invalid_email",
             ErrorMessage = "Email format is invalid",
             ErrorUrl = "https://stytch.com/docs/api/errors/400",
-            IsSuccessStatusCode = false,
         };
 
-        var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(response);
+        var mockHttpMessageHandler = new MockHttpMessageHandler<SendMagicLinkResponse>(
+            statusCode,
+            response
+        );
 
         var magicLink = new MagicLinkService(
             new HttpClient(mockHttpMessageHandler),
@@ -80,7 +84,7 @@ public class SendMagicLinkTest
         Assert.NotNull(result.ErrorUrl);
         Assert.NotNull(result.RequestId);
 
-        Assert.Equal(result.StatusCode, HttpStatusCode.BadRequest);
+        Assert.Equal(statusCode, result.StatusCode);
         Assert.False(result.IsSuccessStatusCode);
         Assert.Null(result.UserId);
         Assert.Null(result.EmailId);

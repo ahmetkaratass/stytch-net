@@ -1,8 +1,11 @@
+using System.Net;
 using System.Text.Json.Serialization;
 
 namespace StytchAuth.Models.MagicLink;
 
 public record AuthenticateResponse(
+    HttpStatusCode StatusCode,
+    bool IsSuccessStatusCode,
     [property: JsonPropertyName("method_id")] string? MethodId = null,
     [property: JsonPropertyName("reset_sessions")] bool? ResetSessions = null,
     // TODO: Create Session Class
@@ -14,8 +17,4 @@ public record AuthenticateResponse(
     [property: JsonPropertyName("user")]
         object? User = null,
     [property: JsonPropertyName("user_id")] string? UserId = null
-) : BaseMagicLinkErrorResponse
-{
-    public AuthenticateResponse()
-        : this(null, null, null, null, null, null, null) { }
-}
+) : BaseMagicLinkErrorResponse(StatusCode, IsSuccessStatusCode);

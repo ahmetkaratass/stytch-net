@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>StytchAuth</PackageId>
-    <Version>0.0.1-a.3</Version>
+    <Version>0.0.1-a.5</Version>
     <Authors>Ahmet Karatas</Authors>
     <Description>Provides the Stytch API in .NET 7. With Stytch, you can build authentication very easily in your application</Description>
     <Copyright>Copyright (c) Ahmet Karatas 2023.</Copyright>

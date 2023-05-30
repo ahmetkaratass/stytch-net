@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -6,9 +7,11 @@ namespace StytchAuth.MagicLink.Tests.Mocks;
 public class MockHttpMessageHandler<T> : HttpMessageHandler
 {
     private readonly T _responseContent;
+    private readonly HttpStatusCode _httpStatusCode;
 
-    public MockHttpMessageHandler(T responseContent)
+    public MockHttpMessageHandler(HttpStatusCode statusCode, T responseContent)
     {
+        _httpStatusCode = statusCode;
         _responseContent = responseContent;
     }
 
@@ -19,6 +22,7 @@ public class MockHttpMessageHandler<T> : HttpMessageHandler
     {
         var response = new HttpResponseMessage()
         {
+            StatusCode = _httpStatusCode,
             Content = new StringContent(
                 JsonSerializer.Serialize(_responseContent),
                 Encoding.UTF8,

@@ -29,8 +29,9 @@ public class MagicLinkService : IMagicLinkService
         var url = GetUrl("email/send");
         var request = await _httpClient.PostAsJsonAsync(url, sendMagicLinkParams);
         return await request.Content
-            .ReadFromJsonAsync<SendMagicLinkResponse>()
-            .AddRequestInfo(request);
+                .ReadFromJsonAsync<SendMagicLinkResponse>()
+                .AddRequestInfo(request)
+            ?? new SendMagicLinkResponse(request.StatusCode, request.IsSuccessStatusCode);
     }
 
     /// <summary>
@@ -44,8 +45,9 @@ public class MagicLinkService : IMagicLinkService
         var url = GetUrl("email/login_or_create");
         var request = await _httpClient.PostAsJsonAsync(url, loginOrCreateParams);
         return await request.Content
-            .ReadFromJsonAsync<LoginOrCreateResponse>()
-            .AddRequestInfo(request);
+                .ReadFromJsonAsync<LoginOrCreateResponse>()
+                .AddRequestInfo(request)
+            ?? new LoginOrCreateResponse(request.StatusCode, request.IsSuccessStatusCode);
     }
 
     /// <summary>
@@ -59,7 +61,8 @@ public class MagicLinkService : IMagicLinkService
     {
         var url = GetUrl("email/invite");
         var request = await _httpClient.PostAsJsonAsync(url, inviteParams);
-        return await request.Content.ReadFromJsonAsync<InviteResponse>().AddRequestInfo(request);
+        return await request.Content.ReadFromJsonAsync<InviteResponse>().AddRequestInfo(request)
+            ?? new InviteResponse(request.StatusCode, request.IsSuccessStatusCode);
     }
 
     /// <summary>
@@ -73,8 +76,9 @@ public class MagicLinkService : IMagicLinkService
         var url = GetUrl("email/revoke_invite");
         var request = await _httpClient.PostAsJsonAsync(url, new { email = email });
         return await request.Content
-            .ReadFromJsonAsync<RevokeInviteResponse>()
-            .AddRequestInfo(request);
+                .ReadFromJsonAsync<RevokeInviteResponse>()
+                .AddRequestInfo(request)
+            ?? new RevokeInviteResponse(request.StatusCode, request.IsSuccessStatusCode);
     }
 
     /// <summary>
@@ -91,8 +95,9 @@ public class MagicLinkService : IMagicLinkService
         var url = GetUrl("authenticate");
         var request = await _httpClient.PostAsJsonAsync(url, authenticateParams);
         return await request.Content
-            .ReadFromJsonAsync<AuthenticateResponse>()
-            .AddRequestInfo(request);
+                .ReadFromJsonAsync<AuthenticateResponse>()
+                .AddRequestInfo(request)
+            ?? new AuthenticateResponse(request.StatusCode, request.IsSuccessStatusCode);
     }
 
     public string GetUrl(string url) => $"https://{_env}.stytch.com/v1/magic_links/{url}";
